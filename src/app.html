@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="be" data-theme="light">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="text-scale" content="scale" />
+		<script>
+			(function () {
+				try {
+					var theme = localStorage.getItem('mikalai-theme');
+					if (theme === 'light' || theme === 'dark' || theme === 'winter') {
+						document.documentElement.dataset.theme = theme;
+					}
+
+					var locale = localStorage.getItem('mikalai-locale');
+					if (locale !== 'be' && locale !== 'ru' && locale !== 'en') {
+						locale = 'be';
+						var langs = navigator.languages || [navigator.language];
+						for (var i = 0; i < langs.length; i++) {
+							var code = String(langs[i] || '').toLowerCase();
+							if (code.indexOf('be') === 0) {
+								locale = 'be';
+								break;
+							}
+							if (code.indexOf('ru') === 0) {
+								locale = 'ru';
+								break;
+							}
+							if (code.indexOf('en') === 0) {
+								locale = 'en';
+								break;
+							}
+						}
+					}
+					document.documentElement.lang = locale;
+				} catch (e) {}
+			})();
+		</script>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
