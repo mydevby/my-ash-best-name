@@ -19,7 +19,6 @@ function detectBrowserLocale(): Locale {
 		const code = raw.toLowerCase();
 		if (code.startsWith('be')) return 'be';
 		if (code.startsWith('ru')) return 'ru';
-		if (code.startsWith('en')) return 'en';
 	}
 
 	return 'be';

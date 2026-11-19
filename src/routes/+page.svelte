@@ -1,8 +1,11 @@
 <script lang="ts">
+	import RegisterModal from '../lib/components/RegisterModal.svelte';
+	import { famousPhotos } from '../lib/famous';
 	import { t } from '../lib/i18n/locale.svelte';
 	import { getTheme } from '../lib/theme/theme.svelte';
 
 	let ready = $state(false);
+	let registerOpen = $state(false);
 
 	const flakes = Array.from({ length: 36 }, (_, i) => ({
 		id: i,
@@ -49,17 +52,66 @@
 		</svg>
 	{/if}
 
-	<section class="about__hero">
+	<section id="top" class="about__hero">
 		<p class="about__brand">{t().brand}</p>
 		<h1 class="about__title">{t().title}</h1>
 		<p class="about__lede">{t().lede}</p>
+		<p class="about__lede">{t().aboutBody1}</p>
+		<p class="about__lede">{t().aboutBody2}</p>
+		<button type="button" class="about__cta" onclick={() => (registerOpen = true)}>
+			{t().registerCta}
+		</button>
 	</section>
 
-	<section class="about__info">
-		<h2 class="about__info-title">{t().aboutTitle}</h2>
-		<p class="about__info-text">{t().aboutBody1}</p>
-		<p class="about__info-text">{t().aboutBody2}</p>
+	<RegisterModal bind:open={registerOpen} />
+
+	<section id="history" class="about__history" aria-labelledby="history-title">
+		<h2 id="history-title" class="about__info-title">{t().historyTitle}</h2>
+		<p class="about__info-text">{t().historyIntro}</p>
+		<p class="about__etymology">
+			<span class="about__etymology-root" lang="el">{t().historyEtymology}</span>
+			<span class="about__etymology-meaning">{t().historyMeaning}</span>
+		</p>
+		<p class="about__info-text">{t().historyBody1}</p>
+		<p class="about__info-text">{t().historyBody2}</p>
 	</section>
+
+	<section id="famous" class="about__famous" aria-labelledby="famous-title">
+		<h2 id="famous-title" class="about__info-title">{t().famousTitle}</h2>
+		<p class="about__info-text">{t().famousIntro}</p>
+
+		<ul class="about__famous-list">
+			{#each t().famousPeople as person (person.id)}
+				<li class="about__person">
+					<figure class="about__person-media">
+						{#if famousPhotos[person.id]}
+							<img
+								class="about__person-photo"
+								src={famousPhotos[person.id]}
+								alt={person.name}
+								width="160"
+								height="200"
+								loading="lazy"
+							/>
+						{:else}
+							<div class="about__person-placeholder" aria-hidden="true">
+								<span>{t().famousPhotoSoon}</span>
+							</div>
+						{/if}
+					</figure>
+					<div class="about__person-copy">
+						<h3 class="about__person-name">{person.name}</h3>
+						<p class="about__person-role">{person.role}</p>
+						<p class="about__person-blurb">{person.blurb}</p>
+					</div>
+				</li>
+			{/each}
+		</ul>
+	</section>
+
+	<footer class="about__footer">
+		<p class="about__footer-note">{t().footerNote}</p>
+	</footer>
 </main>
 
 <style>
@@ -68,9 +120,9 @@
 		position: relative;
 		isolation: isolate;
 		display: grid;
-		grid-template-rows: 1fr 1fr;
-		overflow: hidden;
-		height: 100dvh;
+		grid-template-rows: minmax(100dvh, auto) auto;
+		overflow: clip;
+		min-height: 100dvh;
 		color: var(--bn-ink);
 	}
 
@@ -115,8 +167,9 @@
 
 	.about__snow {
 		position: absolute;
-		inset: 0;
+		inset: 0 0 auto;
 		z-index: 1;
+		height: 100dvh;
 		pointer-events: none;
 		overflow: hidden;
 	}
@@ -136,8 +189,8 @@
 
 	.about__pine {
 		position: absolute;
+		top: calc(100dvh - min(42vw, 17rem) * 1.45);
 		right: clamp(-1rem, -2vw, 0);
-		bottom: 0;
 		z-index: 0;
 		width: min(42vw, 17rem);
 		height: auto;
@@ -148,7 +201,8 @@
 	}
 
 	.about__hero,
-	.about__info {
+	.about__history,
+	.about__famous {
 		position: relative;
 		z-index: 2;
 		display: flex;
@@ -157,27 +211,54 @@
 		gap: clamp(0.65rem, 1.6vh, 1rem);
 		padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 		max-width: 40rem;
-		overflow: hidden;
 	}
 
 	.about__hero {
-		padding-top: clamp(5rem, 12vh, 7rem);
-		padding-bottom: clamp(1rem, 3vh, 1.75rem);
+		justify-content: center;
+		min-height: calc(100dvh - var(--bn-header-height, 3.75rem));
+		padding-top: clamp(2rem, 6vh, 3.5rem);
+		padding-bottom: clamp(2rem, 6vh, 3.5rem);
+		scroll-margin-top: var(--bn-header-height, 3.75rem);
 	}
 
-	.about__info {
+	.about__history,
+	.about__famous {
 		justify-content: center;
-		padding-top: clamp(0.75rem, 2vh, 1.25rem);
-		padding-bottom: clamp(1.25rem, 4vh, 2rem);
+		scroll-margin-top: var(--bn-header-height, 3.75rem);
+		padding-top: clamp(1.5rem, 4vh, 2.5rem);
+		padding-bottom: clamp(1.5rem, 4vh, 2.5rem);
 		border-top: 1px solid var(--bn-line);
 		background: var(--bn-panel);
+	}
+
+	.about__famous {
+		max-width: 46rem;
+		padding-bottom: clamp(1.5rem, 4vh, 2.5rem);
+	}
+
+	.about__footer {
+		position: relative;
+		z-index: 2;
+		padding: clamp(1.5rem, 4vh, 2.25rem) clamp(1.25rem, 4vw, 2.5rem)
+			clamp(2rem, 5vh, 3rem);
+		border-top: 1px solid var(--bn-line);
+		max-width: 40rem;
+	}
+
+	.about__footer-note {
+		margin: 0;
+		max-width: 38ch;
+		font-size: clamp(0.88rem, 2vw, 0.98rem);
+		line-height: 1.45;
+		color: var(--bn-ink-soft);
 	}
 
 	.about__brand,
 	.about__title,
 	.about__lede,
 	.about__info-title,
-	.about__info-text {
+	.about__info-text,
+	.about__etymology {
 		opacity: var(--reveal);
 		transform: translateY(calc((1 - var(--reveal)) * 1.1rem));
 		transition:
@@ -219,11 +300,56 @@
 
 	.about__lede {
 		margin: 0;
-		max-width: 34ch;
+		max-width: 38ch;
 		font-size: clamp(1rem, 2.4vw, 1.15rem);
 		line-height: 1.45;
 		color: var(--bn-ink-soft);
 		transition-delay: 240ms;
+	}
+
+	.about__lede + .about__lede {
+		transition-delay: 300ms;
+	}
+
+	.about__lede + .about__lede + .about__lede {
+		transition-delay: 360ms;
+	}
+
+	.about__cta {
+		align-self: flex-start;
+		margin-top: 0.55rem;
+		min-height: 2.75rem;
+		padding: 0.7rem 1.25rem;
+		border: 0;
+		border-radius: 0.45rem;
+		background: var(--bn-control-active-bg);
+		color: var(--bn-control-active-fg);
+		font-family: var(--font-display);
+		font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+		font-weight: 650;
+		letter-spacing: -0.02em;
+		cursor: pointer;
+		opacity: var(--reveal);
+		transform: translateY(calc((1 - var(--reveal)) * 1.1rem));
+		transition:
+			opacity 0.7s ease,
+			transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+			filter 0.18s ease;
+		transition-delay: 420ms;
+	}
+
+	.about__cta:hover {
+		filter: brightness(1.06);
+	}
+
+	.about__cta:focus-visible {
+		outline: 2px solid var(--bn-gold);
+		outline-offset: 3px;
+	}
+
+	.about--winter .about__cta {
+		background: var(--bn-accent);
+		color: #fff7f7;
 	}
 
 	.about__info-title {
@@ -262,6 +388,149 @@
 		transition-delay: 420ms;
 	}
 
+	.about__etymology {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.65rem 1.1rem;
+		margin: 0.15rem 0 0.35rem;
+		max-width: 40rem;
+		transition-delay: 390ms;
+	}
+
+	.about__etymology-root {
+		font-family: var(--font-display);
+		font-size: clamp(1.35rem, 3.8vw, 1.85rem);
+		font-weight: 650;
+		letter-spacing: -0.03em;
+		color: var(--bn-leaf-deep);
+	}
+
+	.about__etymology-meaning {
+		font-size: clamp(0.95rem, 2.2vw, 1.08rem);
+		line-height: 1.4;
+		color: var(--bn-ink-soft);
+	}
+
+	.about__etymology-meaning::before {
+		content: '—';
+		margin-right: 0.65rem;
+		color: var(--bn-accent);
+	}
+
+	.about--winter .about__etymology-root {
+		color: var(--bn-leaf-deep);
+	}
+
+	.about__history .about__info-text {
+		transition-delay: 450ms;
+	}
+
+	.about__history .about__info-text + .about__info-text {
+		transition-delay: 510ms;
+	}
+
+	.about__famous-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		margin: 0.35rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.about__person {
+		display: grid;
+		grid-template-columns: 7.5rem minmax(0, 1fr);
+		gap: 1rem 1.15rem;
+		align-items: start;
+		padding-block: 1.15rem;
+		border-top: 1px solid var(--bn-line);
+	}
+
+	.about__person:last-child {
+		padding-bottom: 0;
+	}
+
+	.about__person-media {
+		margin: 0;
+		width: 7.5rem;
+		aspect-ratio: 4 / 5;
+		overflow: hidden;
+		background: color-mix(in oklab, var(--bn-leaf) 10%, var(--bn-paper));
+	}
+
+	.about__person-photo {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.about__person-placeholder {
+		display: grid;
+		place-items: center;
+		width: 100%;
+		height: 100%;
+		padding: 0.5rem;
+		border: 1px dashed color-mix(in oklab, var(--bn-ink) 18%, transparent);
+		font-family: var(--font-display);
+		font-size: 0.72rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		line-height: 1.25;
+		text-align: center;
+		color: var(--bn-ink-soft);
+		background:
+			linear-gradient(
+				135deg,
+				color-mix(in oklab, var(--bn-gold) 12%, transparent),
+				transparent 55%
+			);
+	}
+
+	.about__person-copy {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+		min-width: 0;
+		padding-top: 0.15rem;
+	}
+
+	.about__person-name {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(1.05rem, 2.6vw, 1.25rem);
+		font-weight: 650;
+		letter-spacing: -0.03em;
+		line-height: 1.2;
+	}
+
+	.about__person-role {
+		margin: 0;
+		font-size: 0.92rem;
+		line-height: 1.35;
+		color: var(--bn-leaf-deep);
+	}
+
+	.about__person-blurb {
+		margin: 0.15rem 0 0;
+		font-size: clamp(0.92rem, 2.1vw, 1.02rem);
+		line-height: 1.45;
+		color: var(--bn-ink-soft);
+	}
+
+	@media (max-width: 420px) {
+		.about__person {
+			grid-template-columns: 5.75rem minmax(0, 1fr);
+			gap: 0.85rem;
+		}
+
+		.about__person-media {
+			width: 5.75rem;
+		}
+	}
+
 	@keyframes snowfall {
 		0% {
 			transform: translate3d(0, 0, 0);
@@ -283,7 +552,9 @@
 		.about__title,
 		.about__lede,
 		.about__info-title,
-		.about__info-text {
+		.about__info-text,
+		.about__etymology,
+		.about__cta {
 			transition: none;
 			transform: none;
 			opacity: 1;

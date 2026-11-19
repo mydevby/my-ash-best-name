@@ -1,6 +1,15 @@
-export const locales = ['be', 'ru', 'en'] as const;
+import type { FamousId } from '../famous';
+
+export const locales = ['be', 'ru'] as const;
 
 export type Locale = (typeof locales)[number];
+
+export type FamousPerson = {
+	id: FamousId;
+	name: string;
+	role: string;
+	blurb: string;
+};
 
 export type Messages = {
 	metaDescription: string;
@@ -9,65 +18,174 @@ export type Messages = {
 	themeLight: string;
 	themeDark: string;
 	themeWinter: string;
+	menuLabel: string;
+	menuOpen: string;
+	menuClose: string;
+	settingsLabel: string;
+	settingsOpen: string;
+	settingsClose: string;
+	navHome: string;
 	brand: string;
 	title: string;
 	lede: string;
-	aboutTitle: string;
 	aboutBody1: string;
 	aboutBody2: string;
+	registerCta: string;
+	registerSoon: string;
+	registerSoonClose: string;
+	historyTitle: string;
+	historyIntro: string;
+	historyBody1: string;
+	historyBody2: string;
+	historyEtymology: string;
+	historyMeaning: string;
+	famousTitle: string;
+	famousIntro: string;
+	famousPhotoSoon: string;
+	famousPeople: FamousPerson[];
+	footerNote: string;
 };
 
 export const messages: Record<Locale, Messages> = {
 	ru: {
-		metaDescription:
-			'Николай — уникальные именные скидки. Пока только для людей с именем Николай и только с паспортом Республики Беларусь.',
+		metaDescription: 'Николай — уникальные именные скидки.',
 		langLabel: 'Язык',
 		themeLabel: 'Тема',
 		themeLight: 'Светлая',
 		themeDark: 'Тёмная',
 		themeWinter: 'Зимняя',
+		menuLabel: 'Меню',
+		menuOpen: 'Открыть меню',
+		menuClose: 'Закрыть меню',
+		settingsLabel: 'Настройки',
+		settingsOpen: 'Открыть настройки',
+		settingsClose: 'Закрыть настройки',
+		navHome: 'Главная',
 		brand: 'Николай',
 		title: 'Уникальные именные скидки',
-		lede: 'Пока только для людей с именем Николай, и только с паспортом Республики Беларусь. Остальные страны в работе.',
-		aboutTitle: 'О приложении',
+		lede: 'Персональные предложения, связанные с именем — не общая акция для всех.',
 		aboutBody1:
-			'Николай связывает скидку с именем. Не общая акция для всех — персональное предложение для конкретного имени.',
-		aboutBody2:
-			'Сейчас доступ открыт людям с именем Николай и паспортом гражданина Республики Беларусь. Остальные страны в работе. Регистрация появится позже.'
+			'Web-приложение связывает скидку с именем: персональное предложение для конкретного имени.',
+		aboutBody2: 'Каждая скидка доступна только по предъявлению паспорта.',
+		registerCta: 'Зарегистрироваться',
+		registerSoon:
+			'Николай, регистрация в приложении уже в разработке, подожди немного.',
+		registerSoonClose: 'Понятно',
+		historyTitle: 'История имени',
+		historyIntro: 'Николай — имя с греческими корнями и долгой христианской традицией.',
+		historyBody1:
+			'Оно восходит к греческому Νικόλαος: «νίκη» — победа и «λαός» — народ. Буквально — «победа народа».',
+		historyBody2:
+			'Имя распространилось благодаря святителю Николаю Чудотворцу, епископу Мир Ликийских. В белорусской и русской традиции оно звучит как Мікалай и Николай — одно из самых узнаваемых мужских имён в регионе.',
+		historyEtymology: 'Νίκη + λαός',
+		historyMeaning: 'победа народа',
+		famousTitle: 'Известные Николаи',
+		famousIntro: 'Имя носили святые, учёные, композиторы и поэты — от Мир Ликийских до Беларуси.',
+		famousPhotoSoon: 'Фото скоро',
+		famousPeople: [
+			{
+				id: 'saint-nicholas',
+				name: 'Святитель Николай Чудотворец',
+				role: 'Епископ Мир Ликийских',
+				blurb: 'Святой, благодаря которому имя Николай стало одним из самых любимых в христианском мире.'
+			},
+			{
+				id: 'husouski',
+				name: 'Николай Гусовский',
+				role: 'Поэт Возрождения',
+				blurb: 'Автор «Песни о зубре» — голос белорусского Возрождения на латинском языке.'
+			},
+			{
+				id: 'gogol',
+				name: 'Николай Гоголь',
+				role: 'Писатель',
+				blurb: 'Классик, чьи «Мёртвые души» и «Ревизор» навсегда изменили русскую литературу.'
+			},
+			{
+				id: 'lobachevsky',
+				name: 'Николай Лобачевский',
+				role: 'Математик',
+				blurb: 'Создатель неевклидовой геометрии — один из тех, кто переписал карту науки.'
+			},
+			{
+				id: 'rimsky-korsakov',
+				name: 'Николай Римский-Корсаков',
+				role: 'Композитор',
+				blurb: 'Мастер оркестра и сказочной оперы, ключевая фигура «Могучей кучки».'
+			}
+		],
+		footerNote:
+			'Проект некоммерческий. Создан с целью безвозмездной помощи Николаям от Николаев.'
 	},
 	be: {
-		metaDescription:
-			'Мікалай — унікальныя іменныя зніжкі. Пакуль толькі для людзей з імем Мікалай і толькі з пашпартам Рэспублікі Беларусь.',
+		metaDescription: 'Мікалай — унікальныя іменныя зніжкі.',
 		langLabel: 'Мова',
 		themeLabel: 'Тэма',
 		themeLight: 'Светлая',
 		themeDark: 'Цёмная',
 		themeWinter: 'Зімовая',
+		menuLabel: 'Меню',
+		menuOpen: 'Адкрыць меню',
+		menuClose: 'Закрыць меню',
+		settingsLabel: 'Налады',
+		settingsOpen: 'Адкрыць налады',
+		settingsClose: 'Закрыць налады',
+		navHome: 'Галоўная',
 		brand: 'Мікалай',
 		title: 'Унікальныя іменныя зніжкі',
-		lede: 'Пакуль толькі для людзей з імем Мікалай, і толькі з пашпартам Рэспублікі Беларусь. Астатнія краіны ў працы.',
-		aboutTitle: 'Пра прыкладанне',
+		lede: 'Персанальныя прапановы, звязаныя з імем — не агульная акцыя для ўсіх.',
 		aboutBody1:
-			'Мікалай звязвае зніжку з імем. Не агульная акцыя для ўсіх — персанальная прапанова для канкрэтнага імя.',
-		aboutBody2:
-			"Зараз доступ адкрыты людзям з імем Мікалай і пашпартам грамадзяніна Рэспублікі Беларусь. Астатнія краіны ў працы. Рэгістрацыя з'явіцца пазней."
-	},
-	en: {
-		metaDescription:
-			'Mikalai — unique name-based discounts. For now only for people named Mikalai, and only with a passport of the Republic of Belarus.',
-		langLabel: 'Language',
-		themeLabel: 'Theme',
-		themeLight: 'Light',
-		themeDark: 'Dark',
-		themeWinter: 'Winter',
-		brand: 'Mikalai',
-		title: 'Unique name-based discounts',
-		lede: 'For now only for people named Mikalai, and only with a passport of the Republic of Belarus. Other countries are in progress.',
-		aboutTitle: 'About the app',
-		aboutBody1:
-			'Mikalai ties a discount to a name. Not a generic promo for everyone — a personal offer for a specific name.',
-		aboutBody2:
-			'Access is currently open to people named Mikalai with a passport of a citizen of the Republic of Belarus. Other countries are in progress. Registration will come later.'
+			'Web-прыкладанне звязвае зніжку з імем: персанальная прапанова для канкрэтнага імя.',
+		aboutBody2: 'Кожная зніжка даступная толькі па прад’яўленні пашпарта.',
+		registerCta: 'Зарэгістравацца',
+		registerSoon:
+			'Мікалай, рэгістрацыя ў прыкладанні ўжо ў распрацоўцы, пачакай крыху.',
+		registerSoonClose: 'Зразумела',
+		historyTitle: 'Гісторыя імя',
+		historyIntro: 'Мікалай — імя з грэчаскімі каранямі і доўгай хрысціянскай традыцыяй.',
+		historyBody1:
+			'Яно паходзіць ад грэчаскага Νικόλαος: «νίκη» — перамога і «λαός» — народ. Літаральна — «перамога народа».',
+		historyBody2:
+			'Імя стала папулярным дзякуючы свяціцелю Мікалаю Цудатворцу, епіскапу Міраў Лікійскіх. У беларускай і рускай традыцыі яно гучыць як Мікалай і Николай — адно з самых пазнаваемых мужчынскіх імёнаў у рэгіёне.',
+		historyEtymology: 'Νίκη + λαός',
+		historyMeaning: 'перамога народа',
+		famousTitle: 'Вядомыя Мікалаі',
+		famousIntro: 'Імя насілі святыя, вучоныя, кампазітары і паэты — ад Міраў Лікійскіх да Беларусі.',
+		famousPhotoSoon: 'Фота хутка',
+		famousPeople: [
+			{
+				id: 'saint-nicholas',
+				name: 'Свяціцель Мікалай Цудатворац',
+				role: 'Епіскап Міраў Лікійскіх',
+				blurb: 'Святы, дзякуючы якому імя Мікалай стала адным з самых любімых у хрысціянскім свеце.'
+			},
+			{
+				id: 'husouski',
+				name: 'Мікалай Гусоўскі',
+				role: 'Паэт Адраджэння',
+				blurb: 'Аўтар «Песні пра зубра» — голас беларускага Адраджэння на лацінскай мове.'
+			},
+			{
+				id: 'gogol',
+				name: 'Мікалай Гогаль',
+				role: 'Пісьменнік',
+				blurb: 'Класік, чые «Мёртвыя душы» і «Рэвізор» назаўжды змянілі рускую літаратуру.'
+			},
+			{
+				id: 'lobachevsky',
+				name: 'Мікалай Лабачэўскі',
+				role: 'Матэматык',
+				blurb: 'Стваральнік нееўклідавай геаметрыі — адзін з тых, хто перапісаў карту навукі.'
+			},
+			{
+				id: 'rimsky-korsakov',
+				name: 'Мікалай Рымскі-Корсакаў',
+				role: 'Кампазітар',
+				blurb: 'Майстар аркестра і казачнай оперы, ключавая фігура «Магутнай купкі».'
+			}
+		],
+		footerNote:
+			'Праект некамерцыйны. Створаны з мэтай бескарыслівай дапамогі Мікалаям ад Мікалаеў.'
 	}
 };
 
@@ -76,6 +194,5 @@ export const localeMeta: Record<
 	{ name: string; htmlLang: string; flagLabel: string }
 > = {
 	ru: { name: 'Русский', htmlLang: 'ru', flagLabel: 'Русский' },
-	be: { name: 'Беларуская', htmlLang: 'be', flagLabel: 'Беларуская' },
-	en: { name: 'English', htmlLang: 'en', flagLabel: 'English' }
+	be: { name: 'Беларуская', htmlLang: 'be', flagLabel: 'Беларуская' }
 };

@@ -20,7 +20,7 @@
 						<rect width="9" height="2" y="2" fill="#0039a6" />
 						<rect width="9" height="2" y="4" fill="#d52b1e" />
 					</svg>
-				{:else if code === 'be'}
+				{:else}
 					<svg viewBox="0 0 12 6">
 						<rect width="12" height="4" fill="#c8312a" />
 						<rect y="4" width="12" height="2" fill="#6dae3e" />
@@ -29,14 +29,6 @@
 							fill="#fff"
 							d="M0.35 0.35h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zM0.35 1.4h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zM0.35 2.45h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zM0.35 3.5h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zM0.35 4.55h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5zm0.75 0h0.5v0.7h-0.5z"
 						/>
-					</svg>
-				{:else}
-					<svg viewBox="0 0 60 30">
-						<rect width="60" height="30" fill="#012169" />
-						<path d="M0 0l60 30M60 0L0 30" stroke="#fff" stroke-width="6" />
-						<path d="M0 0l60 30M60 0L0 30" stroke="#c8102e" stroke-width="4" />
-						<path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10" />
-						<path d="M30 0v30M0 15h60" stroke="#c8102e" stroke-width="6" />
 					</svg>
 				{/if}
 			</span>

@@ -13,7 +13,7 @@
 					}
 
 					var locale = localStorage.getItem('mikalai-locale');
-					if (locale !== 'be' && locale !== 'ru' && locale !== 'en') {
+					if (locale !== 'be' && locale !== 'ru') {
 						locale = 'be';
 						var langs = navigator.languages || [navigator.language];
 						for (var i = 0; i < langs.length; i++) {
@@ -24,10 +24,6 @@
 							}
 							if (code.indexOf('ru') === 0) {
 								locale = 'ru';
-								break;
-							}
-							if (code.indexOf('en') === 0) {
-								locale = 'en';
 								break;
 							}
 						}

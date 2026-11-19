@@ -73,8 +73,8 @@ html[data-theme='winter'] {
 
 @layer base {
 	html {
-		height: 100%;
-		overflow: hidden;
+		min-height: 100%;
+		scroll-padding-top: var(--bn-header-height, 3.75rem);
 		color: var(--bn-ink);
 		background: var(--bn-paper);
 		font-family: var(--font-body);
@@ -83,9 +83,8 @@ html[data-theme='winter'] {
 	}
 
 	body {
-		height: 100%;
+		min-height: 100%;
 		margin: 0;
-		overflow: hidden;
 	}
 
 	a {
