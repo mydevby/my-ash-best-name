@@ -1,12 +1,18 @@
 export {
+	estimateReadingMinutes,
+	formatBlogTag,
+	formatReadingTime,
 	getAllBlogSlugs,
 	getBlogPost,
 	getBlogPosts,
-	type BlogPost
+	getBlogTags,
+	type BlogPost,
+	type BlogTagId
 } from './blog';
 export { famousIds, famousPhotos, type FamousId } from './famous';
 export { getLocale, setLocale, t } from './i18n/locale.svelte';
 export {
+	blogTagIds,
 	localeMeta,
 	locales,
 	messages,

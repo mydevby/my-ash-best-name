@@ -4,6 +4,10 @@ export const locales = ['be', 'ru'] as const;
 
 export type Locale = (typeof locales)[number];
 
+export const blogTagIds = ['name', 'history', 'discounts'] as const;
+
+export type BlogTagId = (typeof blogTagIds)[number];
+
 export type FamousPerson = {
 	id: FamousId;
 	name: string;
@@ -17,6 +21,7 @@ export type BlogPostMessages = {
 	title: string;
 	excerpt: string;
 	body: string[];
+	tags: BlogTagId[];
 };
 
 export type Messages = {
@@ -37,8 +42,12 @@ export type Messages = {
 	blogTitle: string;
 	blogIntro: string;
 	blogEmpty: string;
+	blogEmptyFilter: string;
 	blogBack: string;
 	blogMetaDescription: string;
+	blogFilterLabel: string;
+	blogFilterAll: string;
+	blogTagLabels: Record<BlogTagId, string>;
 	blogPosts: BlogPostMessages[];
 	brand: string;
 	title: string;
@@ -80,14 +89,23 @@ export const messages: Record<Locale, Messages> = {
 		blogTitle: 'Блог',
 		blogIntro: 'Заметки об имени, скидках и жизни Николаев.',
 		blogEmpty: 'Записи скоро появятся.',
+		blogEmptyFilter: 'Нет записей с этим хэштегом.',
 		blogBack: 'Все записи',
 		blogMetaDescription: 'Блог Николая — заметки об имени и именных скидках.',
+		blogFilterLabel: 'Хэштеги',
+		blogFilterAll: 'Все',
+		blogTagLabels: {
+			name: 'имя',
+			history: 'история',
+			discounts: 'скидки'
+		},
 		blogPosts: [
 			{
 				slug: 'istoriya-imeni',
 				date: '2026-11-19',
 				title: 'История имени Николай',
 				excerpt: 'Откуда взялось имя и почему оно звучит как «победа народа».',
+				tags: ['name', 'history'],
 				body: [
 					'Имя Николай восходит к греческому Νικόλαος: «νίκη» — победа и «λαός» — народ.',
 					'Оно распространилось благодаря святителю Николаю Чудотворцу и надолго осталось одним из самых узнаваемых мужских имён в регионе.'
@@ -98,6 +116,7 @@ export const messages: Record<Locale, Messages> = {
 				date: '2026-11-19',
 				title: 'Что такое именные скидки',
 				excerpt: 'Почему предложение привязано к имени, а не к общей акции для всех.',
+				tags: ['name', 'discounts'],
 				body: [
 					'Именная скидка — это персональное предложение, связанное с конкретным именем.',
 					'Web-приложение собирает такие предложения вокруг имени и открывает их по предъявлению паспорта.'
@@ -178,14 +197,23 @@ export const messages: Record<Locale, Messages> = {
 		blogTitle: 'Блог',
 		blogIntro: 'Нататкі пра імя, зніжкі і жыццё Мікалаеў.',
 		blogEmpty: 'Запісы хутка з’явяцца.',
+		blogEmptyFilter: 'Няма запісаў з гэтым хэштэгам.',
 		blogBack: 'Усе запісы',
 		blogMetaDescription: 'Блог Мікалая — нататкі пра імя і іменныя зніжкі.',
+		blogFilterLabel: 'Хэштэгі',
+		blogFilterAll: 'Усе',
+		blogTagLabels: {
+			name: 'імя',
+			history: 'гісторыя',
+			discounts: 'зніжкі'
+		},
 		blogPosts: [
 			{
 				slug: 'istoriya-imeni',
 				date: '2026-11-19',
 				title: 'Гісторыя імя Мікалай',
 				excerpt: 'Адкуль узялося імя і чаму яно гучыць як «перамога народа».',
+				tags: ['name', 'history'],
 				body: [
 					'Імя Мікалай паходзіць ад грэчаскага Νικόλαος: «νίκη» — перамога і «λαός» — народ.',
 					'Яно стала папулярным дзякуючы свяціцелю Мікалаю Цудатворцу і засталося адным з самых пазнаваемых мужчынскіх імёнаў у рэгіёне.'
@@ -196,6 +224,7 @@ export const messages: Record<Locale, Messages> = {
 				date: '2026-11-19',
 				title: 'Што такое іменныя зніжкі',
 				excerpt: 'Чаму прапанова прывязана да імя, а не да агульнай акцыі для ўсіх.',
+				tags: ['name', 'discounts'],
 				body: [
 					'Іменная зніжка — гэта персанальная прапанова, звязаная з канкрэтным імем.',
 					'Web-прыкладанне збірае такія прапановы вакол імя і адкрывае іх па прад’яўленні пашпарта.'

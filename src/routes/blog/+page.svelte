@@ -1,9 +1,24 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { getBlogPosts } from '../../lib/blog';
+	import {
+		formatBlogTag,
+		formatReadingTime,
+		getBlogPosts,
+		getBlogTags,
+		type BlogTagId
+	} from '../../lib/blog';
 	import { getLocale, t } from '../../lib/i18n/locale.svelte';
 
-	const posts = $derived(getBlogPosts(getLocale()));
+	let activeTag = $state<BlogTagId | null>(null);
+
+	const locale = $derived(getLocale());
+	const posts = $derived(getBlogPosts(locale));
+	const tags = $derived(getBlogTags(locale));
+	const visiblePosts = $derived.by(() => {
+		const tag = activeTag;
+		if (!tag) return posts;
+		return posts.filter((post) => post.tags.includes(tag));
+	});
 
 	function formatDate(value: string) {
 		const [year, month, day] = value.split('-').map(Number);
@@ -13,6 +28,10 @@
 			month: 'long',
 			day: 'numeric'
 		});
+	}
+
+	function setTag(tag: BlogTagId | null) {
+		activeTag = activeTag === tag ? null : tag;
 	}
 </script>
 
@@ -28,19 +47,55 @@
 		<p class="blog__eyebrow">{t().brand}</p>
 		<h1 class="blog__title">{t().blogTitle}</h1>
 		<p class="blog__lede">{t().blogIntro}</p>
+
+		{#if tags.length > 0}
+			<div class="blog__filters" role="group" aria-label={t().blogFilterLabel}>
+				<button
+					type="button"
+					class="blog__filter"
+					class:blog__filter--active={activeTag === null}
+					aria-pressed={activeTag === null}
+					onclick={() => (activeTag = null)}
+				>
+					{t().blogFilterAll}
+				</button>
+				{#each tags as tag (tag)}
+					<button
+						type="button"
+						class="blog__filter"
+						class:blog__filter--active={activeTag === tag}
+						aria-pressed={activeTag === tag}
+						onclick={() => setTag(tag)}
+					>
+						{formatBlogTag(tag, locale)}
+					</button>
+				{/each}
+			</div>
+		{/if}
 	</section>
 
 	<section class="blog__list" aria-label={t().blogTitle}>
 		{#if posts.length === 0}
 			<p class="blog__empty">{t().blogEmpty}</p>
+		{:else if visiblePosts.length === 0}
+			<p class="blog__empty">{t().blogEmptyFilter}</p>
 		{:else}
 			<ul class="blog__items">
-				{#each posts as post (post.slug)}
+				{#each visiblePosts as post (post.slug)}
 					<li class="blog__item">
 						<a class="blog__link" href={resolve(`blog/${post.slug}`)}>
-							<time class="blog__date" datetime={post.date}>{formatDate(post.date)}</time>
+							<p class="blog__meta">
+								<time datetime={post.date}>{formatDate(post.date)}</time>
+								<span aria-hidden="true">·</span>
+								<span>{formatReadingTime(post.readingMinutes, locale)}</span>
+							</p>
 							<h2 class="blog__post-title">{post.title}</h2>
 							<p class="blog__excerpt">{post.excerpt}</p>
+							<p class="blog__tags">
+								{#each post.tags as tag (tag)}
+									<span class="blog__tag">{formatBlogTag(tag, locale)}</span>
+								{/each}
+							</p>
 						</a>
 					</li>
 				{/each}
@@ -120,6 +175,44 @@
 		color: var(--bn-ink-soft);
 	}
 
+	.blog__filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem 1rem;
+		margin-top: 0.55rem;
+	}
+
+	.blog__filter {
+		padding: 0;
+		border: 0;
+		border-bottom: 2px solid transparent;
+		background: transparent;
+		color: var(--bn-ink-soft);
+		font-family: var(--font-display);
+		font-size: 0.92rem;
+		font-weight: 650;
+		letter-spacing: -0.02em;
+		line-height: 1.3;
+		cursor: pointer;
+		transition:
+			color 0.18s ease,
+			border-color 0.18s ease;
+	}
+
+	.blog__filter:hover {
+		color: var(--bn-ink);
+	}
+
+	.blog__filter--active {
+		color: var(--bn-leaf-deep);
+		border-bottom-color: var(--bn-accent);
+	}
+
+	.blog__filter:focus-visible {
+		outline: 2px solid var(--bn-gold);
+		outline-offset: 3px;
+	}
+
 	.blog__list {
 		padding-bottom: clamp(2.5rem, 7vh, 4rem);
 	}
@@ -168,7 +261,11 @@
 		outline-offset: 3px;
 	}
 
-	.blog__date {
+	.blog__meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin: 0;
 		font-size: 0.88rem;
 		line-height: 1.3;
 		color: var(--bn-ink-soft);
@@ -190,5 +287,21 @@
 		font-size: clamp(0.95rem, 2.2vw, 1.05rem);
 		line-height: 1.45;
 		color: var(--bn-ink-soft);
+	}
+
+	.blog__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem 0.85rem;
+		margin: 0.2rem 0 0;
+		font-family: var(--font-display);
+		font-size: 0.82rem;
+		font-weight: 650;
+		letter-spacing: -0.02em;
+		color: var(--bn-leaf-deep);
+	}
+
+	.blog__tag {
+		display: inline-block;
 	}
 </style>

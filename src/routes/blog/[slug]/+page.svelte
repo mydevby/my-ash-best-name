@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { getBlogPost } from '../../../lib/blog';
+	import { formatBlogTag, formatReadingTime, getBlogPost } from '../../../lib/blog';
 	import { getLocale, t } from '../../../lib/i18n/locale.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
-	const post = $derived(getBlogPost(data.slug, getLocale()));
+	const locale = $derived(getLocale());
+	const post = $derived(getBlogPost(data.slug, locale));
 
 	function formatDate(value: string) {
 		const [year, month, day] = value.split('-').map(Number);
@@ -32,8 +33,17 @@
 			<p class="post__eyebrow">
 				<a class="post__back" href={resolve('blog')}>{t().blogBack}</a>
 			</p>
-			<time class="post__date" datetime={post.date}>{formatDate(post.date)}</time>
+			<p class="post__meta">
+				<time datetime={post.date}>{formatDate(post.date)}</time>
+				<span aria-hidden="true">·</span>
+				<span>{formatReadingTime(post.readingMinutes, locale)}</span>
+			</p>
 			<h1 class="post__title">{post.title}</h1>
+			<p class="post__tags">
+				{#each post.tags as tag (tag)}
+					<span class="post__tag">{formatBlogTag(tag, locale)}</span>
+				{/each}
+			</p>
 			{#each post.body as paragraph, index (index)}
 				<p class="post__text">{paragraph}</p>
 			{/each}
@@ -104,19 +114,39 @@
 		outline-offset: 3px;
 	}
 
-	.post__date {
+	.post__meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin: 0;
 		font-size: 0.92rem;
 		line-height: 1.3;
 		color: var(--bn-ink-soft);
 	}
 
 	.post__title {
-		margin: 0 0 0.4rem;
+		margin: 0;
 		font-family: var(--font-display);
 		font-size: clamp(1.7rem, 5vw, 2.5rem);
 		font-weight: 700;
 		letter-spacing: -0.04em;
 		line-height: 1.1;
+	}
+
+	.post__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem 0.85rem;
+		margin: 0 0 0.35rem;
+		font-family: var(--font-display);
+		font-size: 0.88rem;
+		font-weight: 650;
+		letter-spacing: -0.02em;
+		color: var(--bn-leaf-deep);
+	}
+
+	.post__tag {
+		display: inline-block;
 	}
 
 	.post__text {
