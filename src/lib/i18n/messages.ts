@@ -11,6 +11,14 @@ export type FamousPerson = {
 	blurb: string;
 };
 
+export type BlogPostMessages = {
+	slug: string;
+	date: string;
+	title: string;
+	excerpt: string;
+	body: string[];
+};
+
 export type Messages = {
 	metaDescription: string;
 	langLabel: string;
@@ -25,6 +33,13 @@ export type Messages = {
 	settingsOpen: string;
 	settingsClose: string;
 	navHome: string;
+	navBlog: string;
+	blogTitle: string;
+	blogIntro: string;
+	blogEmpty: string;
+	blogBack: string;
+	blogMetaDescription: string;
+	blogPosts: BlogPostMessages[];
 	brand: string;
 	title: string;
 	lede: string;
@@ -61,6 +76,34 @@ export const messages: Record<Locale, Messages> = {
 		settingsOpen: 'Открыть настройки',
 		settingsClose: 'Закрыть настройки',
 		navHome: 'Главная',
+		navBlog: 'Блог',
+		blogTitle: 'Блог',
+		blogIntro: 'Заметки об имени, скидках и жизни Николаев.',
+		blogEmpty: 'Записи скоро появятся.',
+		blogBack: 'Все записи',
+		blogMetaDescription: 'Блог Николая — заметки об имени и именных скидках.',
+		blogPosts: [
+			{
+				slug: 'istoriya-imeni',
+				date: '2026-11-19',
+				title: 'История имени Николай',
+				excerpt: 'Откуда взялось имя и почему оно звучит как «победа народа».',
+				body: [
+					'Имя Николай восходит к греческому Νικόλαος: «νίκη» — победа и «λαός» — народ.',
+					'Оно распространилось благодаря святителю Николаю Чудотворцу и надолго осталось одним из самых узнаваемых мужских имён в регионе.'
+				]
+			},
+			{
+				slug: 'imennye-skidki',
+				date: '2026-11-19',
+				title: 'Что такое именные скидки',
+				excerpt: 'Почему предложение привязано к имени, а не к общей акции для всех.',
+				body: [
+					'Именная скидка — это персональное предложение, связанное с конкретным именем.',
+					'Web-приложение собирает такие предложения вокруг имени и открывает их по предъявлению паспорта.'
+				]
+			}
+		],
 		brand: 'Николай',
 		title: 'Уникальные именные скидки',
 		lede: 'Персональные предложения, связанные с именем — не общая акция для всех.',
@@ -131,6 +174,34 @@ export const messages: Record<Locale, Messages> = {
 		settingsOpen: 'Адкрыць налады',
 		settingsClose: 'Закрыць налады',
 		navHome: 'Галоўная',
+		navBlog: 'Блог',
+		blogTitle: 'Блог',
+		blogIntro: 'Нататкі пра імя, зніжкі і жыццё Мікалаеў.',
+		blogEmpty: 'Запісы хутка з’явяцца.',
+		blogBack: 'Усе запісы',
+		blogMetaDescription: 'Блог Мікалая — нататкі пра імя і іменныя зніжкі.',
+		blogPosts: [
+			{
+				slug: 'istoriya-imeni',
+				date: '2026-11-19',
+				title: 'Гісторыя імя Мікалай',
+				excerpt: 'Адкуль узялося імя і чаму яно гучыць як «перамога народа».',
+				body: [
+					'Імя Мікалай паходзіць ад грэчаскага Νικόλαος: «νίκη» — перамога і «λαός» — народ.',
+					'Яно стала папулярным дзякуючы свяціцелю Мікалаю Цудатворцу і засталося адным з самых пазнаваемых мужчынскіх імёнаў у рэгіёне.'
+				]
+			},
+			{
+				slug: 'imennye-skidki',
+				date: '2026-11-19',
+				title: 'Што такое іменныя зніжкі',
+				excerpt: 'Чаму прапанова прывязана да імя, а не да агульнай акцыі для ўсіх.',
+				body: [
+					'Іменная зніжка — гэта персанальная прапанова, звязаная з канкрэтным імем.',
+					'Web-прыкладанне збірае такія прапановы вакол імя і адкрывае іх па прад’яўленні пашпарта.'
+				]
+			}
+		],
 		brand: 'Мікалай',
 		title: 'Унікальныя іменныя зніжкі',
 		lede: 'Персанальныя прапановы, звязаныя з імем — не агульная акцыя для ўсіх.',

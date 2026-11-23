@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
+	import { tick } from 'svelte';
 	import LanguageSwitcher from './LanguageSwitcher.svelte';
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
 	import { t } from '../i18n/locale.svelte';
@@ -6,10 +10,20 @@
 	let menuOpen = $state(false);
 	let settingsOpen = $state(false);
 
+	const homePath = $derived(resolve('/'));
+	const blogPath = $derived(resolve('blog'));
+	const isHome = $derived(
+		page.url.pathname === homePath ||
+			page.url.pathname.replace(/\/$/, '') === homePath.replace(/\/$/, '') ||
+			page.url.pathname === '/' ||
+			page.url.pathname === ''
+	);
+
 	const navItems = $derived([
-		{ href: '#top', label: t().navHome },
-		{ href: '#history', label: t().historyTitle },
-		{ href: '#famous', label: t().famousTitle }
+		{ href: homePath, label: t().navHome, hash: 'top' },
+		{ href: `${homePath}#history`, label: t().historyTitle, hash: 'history' },
+		{ href: `${homePath}#famous`, label: t().famousTitle, hash: 'famous' },
+		{ href: blogPath, label: t().navBlog, hash: null }
 	]);
 
 	const brandInitial = $derived(t().brand.trim().charAt(0));
@@ -48,9 +62,7 @@
 		if (event.key === 'Escape') closeAll();
 	}
 
-	function goTo(href: string) {
-		closeAll();
-		const id = href.replace('#', '');
+	function scrollToId(id: string) {
 		const target = document.getElementById(id);
 		if (!target) return;
 
@@ -60,15 +72,44 @@
 				getComputedStyle(document.documentElement).getPropertyValue('--bn-header-height')
 			) || 60;
 		const top = target.getBoundingClientRect().top + window.scrollY - headerHeight;
-
 		window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+	}
+
+	async function goHomeSection(hash: string) {
+		closeAll();
+		if (isHome) {
+			scrollToId(hash);
+			return;
+		}
+		await goto(`${homePath}#${hash}`);
+		await tick();
+		scrollToId(hash);
+	}
+
+	async function goRoute(href: string) {
+		closeAll();
+		await goto(href);
+	}
+
+	async function onNavClick(event: MouseEvent, href: string, hash: string | null) {
+		event.preventDefault();
+		if (hash) {
+			await goHomeSection(hash);
+			return;
+		}
+		await goRoute(href);
+	}
+
+	async function onBrandClick(event: MouseEvent) {
+		event.preventDefault();
+		await goHomeSection('top');
 	}
 </script>
 
 <svelte:window onkeydown={onKeydown} />
 
 <header class="header">
-	<a class="header__brand" href="#top" onclick={(event) => { event.preventDefault(); goTo('#top'); }}>
+	<a class="header__brand" href={homePath} onclick={onBrandClick}>
 		<span class="header__mark" aria-hidden="true">
 			<span class="header__mark-letter">{brandInitial}</span>
 		</span>
@@ -164,10 +205,7 @@
 						class="header__nav-link"
 						href={item.href}
 						tabindex={menuOpen ? 0 : -1}
-						onclick={(event) => {
-							event.preventDefault();
-							goTo(item.href);
-						}}
+						onclick={(event) => onNavClick(event, item.href, item.hash)}
 					>
 						{item.label}
 					</a>

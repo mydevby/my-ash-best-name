@@ -1,9 +1,16 @@
+export {
+	getAllBlogSlugs,
+	getBlogPost,
+	getBlogPosts,
+	type BlogPost
+} from './blog';
 export { famousIds, famousPhotos, type FamousId } from './famous';
 export { getLocale, setLocale, t } from './i18n/locale.svelte';
 export {
 	localeMeta,
 	locales,
 	messages,
+	type BlogPostMessages,
 	type FamousPerson,
 	type Locale,
 	type Messages
